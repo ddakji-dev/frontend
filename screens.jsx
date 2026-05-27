@@ -202,13 +202,14 @@ function EnhanceScreen() {
     if (!r.ok) return;
     setTimeout(() => {
       setResult({ ...r, track });
-      if (r.success) {
+      if (r.outcome === 'success') {
         setGlowing(true);
         setTimeout(() => setGlowing(false), 1200);
-      } else {
+      } else if (r.outcome === 'drop') {
         setTearing(true);
         setTimeout(() => setTearing(false), 900);
       }
+      // 'stay' — no special effect (only shake from earlier)
       setTimeout(() => setResult(null), 1800);
     }, 200);
   };
@@ -242,13 +243,17 @@ function EnhanceScreen() {
         {/* Result overlay */}
         {result && (
           <div className="enh-result">
-            <div className={`enh-result-card ${result.success ? 'success' : 'fail'}`}>
-              <div className="label">{result.success ? '강화 성공' : '강화 실패'}</div>
+            <div className={`enh-result-card outcome-${result.outcome}`}>
+              <div className="label">
+                {result.outcome === 'success' && '강화 성공'}
+                {result.outcome === 'stay'    && '강화 유지'}
+                {result.outcome === 'drop'    && '강화 하락'}
+              </div>
               <div className="big serif">+{result.newLvl}</div>
               <div className="delta">
-                {result.success
-                  ? `${result.track === 'atk' ? '종이 재질' : '동전'} 강화 성공`
-                  : result.drop > 0 ? `${result.track === 'atk' ? '재질' : '동전'} −${result.drop}강` : '강화 유지'}
+                {result.outcome === 'success' && `${result.track === 'atk' ? '종이 재질' : '동전'} 강화 성공`}
+                {result.outcome === 'stay'    && `${result.track === 'atk' ? '재질' : '동전'} 강화 그대로 유지`}
+                {result.outcome === 'drop'    && `${result.track === 'atk' ? '재질' : '동전'} −${result.drop}강 하락`}
               </div>
             </div>
           </div>
@@ -291,7 +296,7 @@ function EnhanceScreen() {
               </span>
             </div>
 
-            {/* Success rate — big */}
+            {/* Success rate — big + breakdown */}
             <div className="enh-success-block">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                 <div className="eyebrow">성공 확률</div>
@@ -299,8 +304,42 @@ function EnhanceScreen() {
               <div className="enh-success-num mono" style={{ color: track === 'atk' ? 'var(--jeok)' : 'var(--cheong)' }}>
                 {Math.round(zone.successRate * 100)}<span style={{ fontSize: 28, marginLeft: 2 }}>%</span>
               </div>
-              <div className="enh-bar" style={{ marginTop: 4 }}>
-                <div className="enh-bar-fill" style={{ width: (zone.successRate * 100) + '%', background: track === 'atk' ? 'var(--jeok)' : 'var(--cheong)' }} />
+
+              {/* Segmented probability bar: 성공 / 유지 / 하락 */}
+              <div className="enh-prob-bar" style={{ marginTop: 6 }}>
+                <div
+                  className="enh-prob-seg seg-success"
+                  style={{ width: (zone.successRate * 100) + '%', background: track === 'atk' ? 'var(--jeok)' : 'var(--cheong)' }}
+                  title={`성공 ${Math.round(zone.successRate * 100)}%`}
+                />
+                <div
+                  className="enh-prob-seg seg-stay"
+                  style={{ width: (zone.stayRate * 100) + '%' }}
+                  title={`유지 ${Math.round(zone.stayRate * 100)}%`}
+                />
+                <div
+                  className="enh-prob-seg seg-drop"
+                  style={{ width: (zone.dropRate * 100) + '%' }}
+                  title={`하락 ${Math.round(zone.dropRate * 100)}%`}
+                />
+              </div>
+
+              <div className="enh-prob-legend">
+                <div className="prob-legend-row">
+                  <span className="legend-dot success" style={{ background: track === 'atk' ? 'var(--jeok)' : 'var(--cheong)' }} />
+                  <span className="legend-label">성공</span>
+                  <span className="legend-val mono">{Math.round(zone.successRate * 100)}%</span>
+                </div>
+                <div className="prob-legend-row">
+                  <span className="legend-dot stay" />
+                  <span className="legend-label">유지</span>
+                  <span className="legend-val mono">{Math.round(zone.stayRate * 100)}%</span>
+                </div>
+                <div className="prob-legend-row">
+                  <span className="legend-dot drop" />
+                  <span className="legend-label">하락 {zone.dropAmount > 0 ? `(−${zone.dropAmount}강)` : ''}</span>
+                  <span className="legend-val mono">{Math.round(zone.dropRate * 100)}%</span>
+                </div>
               </div>
             </div>
 
@@ -347,7 +386,7 @@ function BattleScreen() {
   }
 
   const playerHitProb = winProbability(g.eff.atk, opp.effDef);
-  const oppHitProb = winProbability(opp.effAtk, g.eff.def);
+  const oppHitProb    = winProbability(opp.effAtk, g.eff.def);
 
   const startBattle = () => {
     setPhase('player-turn');
@@ -488,28 +527,30 @@ function BattleScreen() {
             <div className="battle-stat">
               <div className="n atk mono">{g.eff.atk}</div>
               <div className="l">공격</div>
+              <div className="sub mono">+{g.atkLvl}재질</div>
             </div>
             <div className="battle-stat">
               <div className="n def mono">{g.eff.def}</div>
               <div className="l">방어</div>
+              <div className="sub mono">+{g.defLvl}동전</div>
             </div>
           </div>
         </div>
 
-        {/* Center: VS + hit probabilities */}
+        {/* Center: VS + asymmetric hit probabilities */}
         <div className="vs-block">
           <div className="vs-glyph">VS</div>
           <div className="hit-prob-display">
             <div className="hit-prob-row">
               <span className="hit-prob-label">내 공격 명중</span>
-              <span className="hit-prob-val mono" style={{ color: 'var(--jeok)' }}>{Math.round(playerHitProb)}%</span>
+              <span className="hit-prob-val small mono" style={{ color: 'var(--jeok)' }}>{Math.round(playerHitProb)}%</span>
             </div>
             <div className="hit-prob-bar">
               <div className="hit-prob-fill atk" style={{ width: playerHitProb + '%' }} />
             </div>
-            <div className="hit-prob-row" style={{ marginTop: 8 }}>
+            <div className="hit-prob-row" style={{ marginTop: 10 }}>
               <span className="hit-prob-label">상대 공격 명중</span>
-              <span className="hit-prob-val mono" style={{ color: 'var(--cheong)' }}>{Math.round(oppHitProb)}%</span>
+              <span className="hit-prob-val small mono" style={{ color: 'var(--cheong)' }}>{Math.round(oppHitProb)}%</span>
             </div>
             <div className="hit-prob-bar">
               <div className="hit-prob-fill def" style={{ width: oppHitProb + '%' }} />
@@ -526,8 +567,16 @@ function BattleScreen() {
 
         {/* Right = opponent */}
         <div className="battle-side right">
-          <div className="battle-tag">상대</div>
-          <div className="battle-name serif">{opp.name}</div>
+          <div className="battle-tag">
+            상대
+            {opp.order && <span className="battle-order mono">#{opp.order}/{opp.total}</span>}
+            {opp.isFinal && <span className="battle-boss-tag">최강 보스</span>}
+          </div>
+          <div className={`battle-name serif ${opp.isFinal ? 'boss-name' : ''}`}>{opp.name}</div>
+          <div className={`battle-build-badge tone-${opp.buildTone}`}>
+            <span className="build-glyph">{opp.buildGlyph}</span>
+            <span className="build-label">{opp.buildLabel}</span>
+          </div>
           <div className={oppClass}>
             <DdakjiCard size={200} seed={opp.paletteSeed} atkLvl={opp.atkLvl} defLvl={opp.defLvl} showStats />
           </div>
@@ -535,10 +584,12 @@ function BattleScreen() {
             <div className="battle-stat">
               <div className="n atk mono">{opp.effAtk}</div>
               <div className="l">공격</div>
+              <div className="sub mono">+{opp.atkLvl}재질</div>
             </div>
             <div className="battle-stat">
               <div className="n def mono">{opp.effDef}</div>
               <div className="l">방어</div>
+              <div className="sub mono">+{opp.defLvl}동전</div>
             </div>
           </div>
         </div>

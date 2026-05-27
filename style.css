@@ -1011,6 +1011,69 @@ html, body {
   letter-spacing: -0.02em;
 }
 
+/* Enhance result card outcomes */
+.enh-result-card.outcome-success .big { color: var(--ink-0); }
+.enh-result-card.outcome-stay    .big { color: var(--ink-1); }
+.enh-result-card.outcome-drop    .big { color: var(--jeok); }
+.enh-result-card.outcome-stay .label  { color: var(--ink-2); }
+.enh-result-card.outcome-drop .label  { color: var(--jeok); }
+
+/* Segmented probability bar */
+.enh-prob-bar {
+  display: flex;
+  width: 100%;
+  height: 10px;
+  background: var(--paper-2);
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid var(--paper-line);
+}
+.enh-prob-seg {
+  height: 100%;
+  transition: width 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.enh-prob-seg.seg-stay {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--paper-3),
+    var(--paper-3) 4px,
+    oklch(0.78 0.03 72) 4px,
+    oklch(0.78 0.03 72) 8px
+  );
+}
+.enh-prob-seg.seg-drop {
+  background: oklch(0.42 0.04 50);
+}
+
+.enh-prob-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+.prob-legend-row {
+  display: grid;
+  grid-template-columns: 12px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+.prob-legend-row .legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.prob-legend-row .legend-dot.stay {
+  background: repeating-linear-gradient(45deg, var(--paper-3), var(--paper-3) 2px, oklch(0.78 0.03 72) 2px, oklch(0.78 0.03 72) 4px);
+}
+.prob-legend-row .legend-dot.drop {
+  background: oklch(0.42 0.04 50);
+}
+.prob-legend-row .legend-label { color: var(--ink-1); }
+.prob-legend-row .legend-val { color: var(--ink-0); font-weight: 600; font-size: 12px; }
+
 /* Enhance CTA — shows action + cost */
 .enh-cta {
   display: flex;
@@ -1216,6 +1279,83 @@ html, body {
 .topbar-battle .topbar-left { justify-self: start; }
 .topbar-battle .topbar-title { justify-self: center; white-space: nowrap; }
 .topbar-battle .topbar-right { justify-self: end; }
+
+/* Opponent order / final boss indicators */
+.battle-order {
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+  background: var(--paper-2);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.battle-boss-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 10px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--paper-0);
+  background: var(--jeok);
+  border-radius: 2px;
+  box-shadow: 2px 2px 0 var(--jeok-deep);
+  animation: boss-pulse 1.8s ease-in-out infinite;
+}
+@keyframes boss-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+.battle-name.boss-name {
+  color: var(--jeok);
+  font-size: 26px;
+  text-shadow: 2px 2px 0 var(--jeok-deep);
+  letter-spacing: -0.01em;
+}
+
+/* Build archetype badge under opponent name */
+.battle-build-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 6px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-top: -8px;
+  background: var(--paper-2);
+  color: var(--ink-1);
+  border: 1px solid var(--paper-line);
+}
+.battle-build-badge .build-glyph {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Gowun Batang', serif;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 50%;
+  background: var(--ink-0);
+  color: var(--paper-0);
+}
+.battle-build-badge.tone-jeok {
+  background: color-mix(in oklch, var(--jeok) 12%, var(--paper-0));
+  color: var(--jeok-deep);
+  border-color: color-mix(in oklch, var(--jeok) 35%, var(--paper-line));
+}
+.battle-build-badge.tone-jeok .build-glyph { background: var(--jeok); }
+.battle-build-badge.tone-cheong {
+  background: color-mix(in oklch, var(--cheong) 12%, var(--paper-0));
+  color: var(--cheong-deep);
+  border-color: color-mix(in oklch, var(--cheong) 35%, var(--paper-line));
+}
+.battle-build-badge.tone-cheong .build-glyph { background: var(--cheong); }
 .turn-indicator {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -1270,14 +1410,15 @@ html, body {
   border: 1px solid var(--paper-line);
   border-radius: var(--radius);
   padding: 14px 16px;
-  width: 200px;
+  width: 220px;
   margin-top: 8px;
 }
+.hit-prob-display.single { width: 220px; }
 .hit-prob-row {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 .hit-prob-label {
   font-size: 11px;
@@ -1285,8 +1426,12 @@ html, body {
   color: var(--ink-2);
 }
 .hit-prob-val {
-  font-size: 18px;
+  font-size: 26px;
   font-weight: 700;
+  color: var(--ink-0);
+}
+.hit-prob-val.small {
+  font-size: 18px;
 }
 .hit-prob-bar {
   height: 6px;
@@ -1294,12 +1439,43 @@ html, body {
   border-radius: 3px;
   overflow: hidden;
 }
+.hit-prob-bar.tall { height: 10px; border-radius: 5px; }
 .hit-prob-fill {
   height: 100%;
   transition: width 400ms ease;
 }
+.hit-prob-fill.power {
+  background: linear-gradient(90deg, var(--cheong) 0%, var(--ink-0) 50%, var(--jeok) 100%);
+}
 .hit-prob-fill.atk { background: var(--jeok); }
 .hit-prob-fill.def { background: var(--cheong); }
+.hit-prob-meta {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-0);
+  font-weight: 600;
+}
+.hit-prob-meta span:nth-child(1), .hit-prob-meta span:nth-child(5) {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-family: 'Pretendard', sans-serif;
+}
+
+/* Battle stat — power highlight */
+.battle-stat.power .n {
+  font-size: 32px;
+  color: var(--ink-0);
+}
+.battle-stat.power .l {
+  font-weight: 700;
+  color: var(--ink-0);
+}
 
 /* Swing-result floating callout */
 .swing-result {
@@ -1708,6 +1884,12 @@ html, body {
   text-transform: uppercase;
   color: var(--ink-2);
   margin-top: 4px;
+}
+.battle-stat .sub {
+  font-size: 10px;
+  color: var(--ink-3);
+  margin-top: 4px;
+  letter-spacing: 0.04em;
 }
 
 .vs-block {
