@@ -109,7 +109,7 @@ function DdakjiCard({ size = 220, seed = 0, atkLvl = 0, defLvl = 0, damaged = fa
         </g>
       </svg>
       {showStats && (
-        <div style={{
+        <div className="ddakji-stat-badge" style={{
           position: 'absolute',
           top: -12,
           left: '50%',

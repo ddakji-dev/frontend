@@ -2573,82 +2573,103 @@ html, body {
   .enh-success-num { font-size: 44px; }
   .enh-cta { padding: 14px 18px; font-size: 14px; }
 
-  /* === Battle — vertical stack === */
-  .battle-arena {
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr auto 1fr;
-    padding: 16px 14px;
-    gap: 12px;
-    align-items: stretch;
-  }
-  .battle-side {
-    flex-direction: row;
-    gap: 12px;
-    align-items: center;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-  }
-  .battle-side.right { flex-direction: row-reverse; }
-  .battle-side .battle-tag {
-    width: 100%;
+  /* === Battle — vertical stack, scrollable arena, sticky CTA === */
+  .battle {
     display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+  .battle-arena {
+    flex: 1 1 auto;
+    min-height: 0;            /* allow flex child to shrink for inner scroll */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    padding: 12px 14px 18px;
+    gap: 10px;
+    align-items: center;
+  }
+  /* Re-order so opponent is at top, VS in middle, player at bottom */
+  .battle-arena .battle-side.right { order: 1; }
+  .battle-arena .vs-block          { order: 2; }
+  .battle-arena .battle-side.left  { order: 3; }
+
+  /* Each fighter — compact column, centered */
+  .battle-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+    width: 100%;
+  }
+  .battle-side.right,
+  .battle-side.left { transform: none; }
+  .battle-tag {
+    display: inline-flex;
     align-items: center;
     gap: 6px;
-    justify-content: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 10px;
   }
-  .battle-side.right .battle-tag { justify-content: flex-end; }
-  .battle-name { font-size: 16px; flex: 1; min-width: 0; }
+  .battle-name { font-size: 16px; }
   .battle-name.boss-name { font-size: 18px; }
-  .battle-side > div:nth-child(3) {
-    /* the ddakji wrapper */
-    flex-shrink: 0;
+
+  /* Shrink ddakji to actual 100px so arena fits — override inline width/height */
+  .battle-arena .ddakji-wrap {
+    width: 100px !important;
+    height: 100px !important;
   }
-  .battle-side .ddakji-wrap,
-  .battle-side > div > .ddakji-wrap { transform: scale(0.55); transform-origin: center; }
-  /* the ddakji is wrapped in animation classes; scale the parent instead */
-  .battle-arena .dd-slide-in-left,
-  .battle-arena .dd-slide-in-right,
-  .battle-arena .dd-swing-r,
-  .battle-arena .dd-swing-l,
-  .battle-arena .dd-flipped,
-  .battle-arena .dd-wobble {
-    transform-origin: center;
+  .battle-arena .ddakji-wrap > svg {
+    width: 100% !important;
+    height: 100% !important;
   }
+  .battle-arena .ddakji-wrap .ddakji-coin-layer svg {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
   .battle-stats {
-    flex: 1;
-    gap: 8px;
-    justify-content: flex-start;
+    flex-direction: row;
+    gap: 14px;
+    justify-content: center;
+    margin-top: 2px;
   }
-  .battle-side.right .battle-stats { justify-content: flex-end; }
   .battle-stat { min-width: 44px; }
-  .battle-stat .n { font-size: 20px; }
-  .battle-stat .l { font-size: 9px; letter-spacing: 0.12em; }
-  .battle-stat .sub { font-size: 9px; }
+  .battle-stat .n { font-size: 18px; }
+  .battle-stat .l { font-size: 9px; letter-spacing: 0.12em; margin-top: 2px; }
+  .battle-stat .sub { font-size: 9px; margin-top: 2px; }
   .battle-build-badge { font-size: 11px; padding: 3px 10px 3px 4px; margin-top: 0; }
   .battle-build-badge .build-glyph { width: 18px; height: 18px; font-size: 12px; }
 
-  /* Center VS block becomes a horizontal strip */
+  /* Center VS — horizontal strip between two fighters */
   .vs-block {
     flex-direction: row;
-    gap: 14px;
+    gap: 12px;
     align-items: center;
     padding: 8px 12px;
     background: var(--paper-0);
     border: 1px solid var(--paper-line);
     border-radius: var(--radius);
+    width: 100%;
   }
-  .vs-glyph { font-size: 28px; }
+  .vs-glyph { font-size: 26px; flex-shrink: 0; }
   .hit-prob-display {
     width: auto;
     flex: 1;
     margin-top: 0;
-    padding: 8px 10px;
+    padding: 4px 6px;
     border: none;
     background: transparent;
   }
-  .hit-prob-val { font-size: 18px; }
+  .hit-prob-row { margin-bottom: 2px; }
+  .hit-prob-val { font-size: 16px; }
   .hit-prob-val.small { font-size: 14px; }
   .hit-prob-label { font-size: 10px; }
+  .hit-prob-bar { height: 4px; }
 
   /* Battle topbar — compact */
   .topbar-battle { padding: 10px 14px; gap: 12px; }
@@ -2656,28 +2677,59 @@ html, body {
   .topbar-battle .btn { padding: 8px 12px; font-size: 12px; }
 
   /* Turn indicator */
-  .turn-indicator { padding: 10px 14px; gap: 8px; }
-  .turn-indicator .turn-num { font-size: 16px; }
-  .turn-indicator .turn-actor { font-size: 14px; }
+  .turn-indicator { padding: 8px 14px; gap: 8px; }
+  .turn-indicator .turn-num { font-size: 14px; }
+  .turn-indicator .turn-actor { font-size: 13px; }
   .turn-warning { font-size: 9px; letter-spacing: 0.08em; }
 
-  /* CTA & log */
-  .battle-cta { padding: 0 14px 16px; min-height: 70px; }
-  .battle-swing-btn { padding: 14px 24px; font-size: 15px; }
-  .battle-cta-waiting { font-size: 13px; padding: 12px 0; }
+  /* CTA — always visible at bottom; flex-shrink: 0 keeps it pinned */
+  .battle-cta {
+    flex-shrink: 0;
+    padding: 10px 14px 14px;
+    min-height: auto;
+    background: linear-gradient(to top, var(--paper-1) 60%, transparent);
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+  }
+  .battle-swing-btn {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 15px;
+  }
+  .btn.btn-primary.btn-lg { width: 100%; }
+  .battle-cta-waiting { font-size: 13px; padding: 10px 0; }
+
+  /* Turn log — horizontal scroll, pinned */
   .battle-turnlog {
-    padding: 10px 14px;
+    flex-shrink: 0;
+    padding: 8px 14px;
     overflow-x: auto;
     flex-wrap: nowrap;
     -webkit-overflow-scrolling: touch;
+    gap: 6px;
   }
   .battle-turnlog::-webkit-scrollbar { display: none; }
   .turnlog-pill { flex-shrink: 0; }
 
-  /* Impact effects — scale down so they fit */
-  .impact-word { font-size: 88px; -webkit-text-stroke-width: 3px; }
-  .impact-word.miss { font-size: 56px; }
-  .countdown-num { font-size: 140px; }
+  /* Impact effects — scale down */
+  .impact-word { font-size: 76px; -webkit-text-stroke-width: 2.5px; }
+  .impact-word.miss { font-size: 48px; }
+  .countdown-num { font-size: 120px; }
+  .impact-ring { animation-duration: 460ms; }
+  /* shrink the impact ring expansion so it doesn't dwarf the screen */
+  @keyframes impact-ring-expand-mobile {
+    0%   { width: 12px; height: 12px; margin: -6px 0 0 -6px; opacity: 1; border-width: 5px; }
+    60%  { opacity: 0.8; }
+    100% { width: 420px; height: 420px; margin: -210px 0 0 -210px; opacity: 0; border-width: 1px; }
+  }
+  .impact-ring { animation-name: impact-ring-expand-mobile; }
+
+  /* In the battle arena the stats are shown separately below the ddakji;
+     hide the floating "+N재질 · +N동전" badge so it doesn't overlap the name. */
+  .battle-arena .ddakji-stat-badge {
+    display: none !important;
+  }
 
   /* === Nickname modal === */
   .nickname-modal-bg { padding: 20px; }
