@@ -2174,3 +2174,47 @@ html, body {
 
 /* Tweaks panel override — match theme */
 .tweaks-panel-host { font-family: 'Pretendard', sans-serif; }
+
+/* === Tweaks launcher (floating, bottom-right) === */
+.tweaks-launcher {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px 10px 12px;
+  border-radius: 999px;
+  background: var(--ink-0);
+  color: var(--paper-0);
+  border: 2px solid var(--ink-0);
+  font-family: 'Pretendard', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow: 0 6px 18px -4px oklch(0.22 0.012 50 / 0.45);
+  transition: transform 140ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 140ms ease, background 140ms ease;
+}
+.tweaks-launcher:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px -4px oklch(0.22 0.012 50 / 0.5);
+  background: oklch(0.12 0.012 50);
+}
+.tweaks-launcher:active { transform: translateY(0); }
+.tweaks-launcher-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: oklch(0.95 0.012 80 / 0.18);
+  color: var(--paper-0);
+  animation: tweaks-cog-spin 8s linear infinite;
+}
+@keyframes tweaks-cog-spin {
+  to { transform: rotate(360deg); }
+}
+.tweaks-launcher-label { line-height: 1; }

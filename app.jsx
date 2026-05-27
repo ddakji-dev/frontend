@@ -3,6 +3,18 @@
 function App() {
   const g = useGame();
   const [t, setTweak] = useTweaks(window.__TWEAK_DEFAULTS || {});
+  const [tweaksOpen, setTweaksOpen] = useState(false);
+
+  // Watch the DOM for the Tweaks panel coming/going. This is robust against
+  // both standalone (window.parent === window) and host-iframe environments
+  // where postMessage round-trips can behave differently.
+  useEffect(() => {
+    const check = () => setTweaksOpen(!!document.querySelector('.twk-panel'));
+    check();
+    const mo = new MutationObserver(check);
+    mo.observe(document.body, { childList: true, subtree: true });
+    return () => mo.disconnect();
+  }, []);
 
   // Apply theme tweaks
   useEffect(() => {
@@ -106,6 +118,25 @@ function App() {
         <TweakSection label="테스트" />
         <TweakButton label="종이 조각 +500" onClick={() => g.addScraps(500)} />
       </TweaksPanel>
+
+      {/* Floating Tweaks launcher — for deployed/standalone use */}
+      {!tweaksOpen && (
+        <button
+          className="tweaks-launcher"
+          onClick={() => {
+            setTweaksOpen(true);
+            window.postMessage({ type: '__activate_edit_mode' }, '*');
+          }}
+          aria-label="Tweaks 열기"
+        >
+          <span className="tweaks-launcher-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor">
+              <path d="M11.49 3.17a1 1 0 0 0-1-.85h-1a1 1 0 0 0-1 .85l-.21 1.34a6.46 6.46 0 0 0-1.46.84l-1.27-.5a1 1 0 0 0-1.24.43l-.5.86a1 1 0 0 0 .21 1.27l1.02.9a6.46 6.46 0 0 0 0 1.7l-1.02.9a1 1 0 0 0-.21 1.27l.5.86a1 1 0 0 0 1.24.43l1.27-.5c.44.34.93.62 1.46.84l.21 1.34a1 1 0 0 0 1 .85h1a1 1 0 0 0 1-.85l.21-1.34c.53-.22 1.02-.5 1.46-.84l1.27.5a1 1 0 0 0 1.24-.43l.5-.86a1 1 0 0 0-.21-1.27l-1.02-.9a6.46 6.46 0 0 0 0-1.7l1.02-.9a1 1 0 0 0 .21-1.27l-.5-.86a1 1 0 0 0-1.24-.43l-1.27.5a6.46 6.46 0 0 0-1.46-.84l-.21-1.34ZM10 12.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/>
+            </svg>
+          </span>
+          <span className="tweaks-launcher-label">Tweaks</span>
+        </button>
+      )}
     </div>
   );
 }
