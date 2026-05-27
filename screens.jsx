@@ -689,7 +689,7 @@ function BattleResultModal({ win, turns, gained, opp, nickname, onAgain, onLobby
                 <div style={{ fontSize: 12, color: 'var(--ink-2)', marginTop: 6, lineHeight: 1.6 }}>
                   · <strong className="serif" style={{ color: 'var(--ink-0)', fontWeight: 700 }}>{nickname || '제 0 호'}</strong> — 딱지와 함께 사라짐<br/>
                   · 재질 <span className="mono">+0</span> / 동전 <span className="mono">+0</span> 상태로 초기화<br/>
-                  · 종이 조각 — 처음 상태(<span className="mono">120</span>)로 복귀
+                  · 종이 조각 — 처음 상태(<span className="mono">250</span>)로 복귀
                 </div>
               </div>
             </div>

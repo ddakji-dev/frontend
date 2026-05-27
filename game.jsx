@@ -97,8 +97,11 @@ function zoneOfNextLevel(nextLvl) {
 }
 
 function scrapsFromDecomposing(atkLvl, defLvl) {
-  // 누적 스탯에 비례한 보상 — 강한 딱지일수록 폭발적
-  return Math.round((totalStatAt(atkLvl) + totalStatAt(defLvl)) * 0.6);
+  // 상대 딱지를 찢어 얻는 종이 조각.
+  // 강화 비용(10/25/50/100)과 실패 확률을 고려해 후반 보스 격파 시 다음 단계
+  // 진입에 필요한 자금 일부를 충당할 수 있도록 넉넉히 보상.
+  const sum = totalStatAt(atkLvl) + totalStatAt(defLvl);
+  return Math.round(20 + sum * 2.5);
 }
 
 function winProbability(myAtk, oppDef) {
@@ -200,9 +203,13 @@ function tierOf(atkLvl, defLvl) {
 const GameContext = createContext(null);
 const useGame = () => useContext(GameContext);
 
+// === 시작 / 초기화 종이 조각 ===
+// 시작자가 +3강 강화 뚜딩 구간(안전) 몇 차례를 감당하고
+// 1번 적에게 충분히 도전할 수 있는 초기 자금.
+const STARTING_SCRAPS = 250;
 function GameProvider({ children }) {
   const [screen, setScreen] = useState('lobby'); // lobby, enhance, battle
-  const [paperScraps, setScraps] = useState(120);
+  const [paperScraps, setScraps] = useState(STARTING_SCRAPS);
   const [atkLvl, setAtkLvl] = useState(0);
   const [defLvl, setDefLvl] = useState(0);
   const [paletteSeed] = useState(0); // player palette
@@ -267,7 +274,7 @@ function GameProvider({ children }) {
       //  early-return before rendering the defeat result modal.)
       setAtkLvl(0);
       setDefLvl(0);
-      setScraps(120); // back to starting scraps
+      setScraps(STARTING_SCRAPS); // back to starting scraps
       setOpponentIdx(0); // restart roster from #1
       setHistory(h => [{ win: false, oppName: opp.name, atk: opp.atkLvl, def: opp.defLvl }, ...h].slice(0, 8));
       return { gained: 0 };

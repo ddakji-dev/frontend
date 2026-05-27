@@ -2357,6 +2357,61 @@ html, body {
 /* Tweaks panel override — match theme */
 .tweaks-panel-host { font-family: 'Pretendard', sans-serif; }
 
+/* === Password modal === */
+.pw-modal-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 1600;
+  background: oklch(0.22 0.012 50 / 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fade-in 200ms ease;
+}
+.pw-modal {
+  background: var(--paper-0);
+  border-radius: var(--radius-lg);
+  padding: 32px 32px 28px;
+  min-width: 340px;
+  max-width: 400px;
+  box-shadow: 0 30px 80px -30px oklch(0.1 0 0 / 0.5);
+  animation: pop 320ms cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+.pw-input {
+  width: 100%;
+  margin-top: 22px;
+  padding: 14px 16px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-align: center;
+  background: var(--paper-2);
+  border: 1px solid var(--paper-line);
+  border-radius: var(--radius);
+  color: var(--ink-0);
+  outline: none;
+  font-family: 'IBM Plex Mono', monospace;
+  transition: all 120ms ease;
+}
+.pw-input:focus {
+  background: var(--paper-0);
+  border-color: var(--ink-0);
+  box-shadow: 0 0 0 3px oklch(0.22 0.012 50 / 0.08);
+}
+.pw-error {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--jeok);
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+.pw-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
 /* === Tweaks launcher (floating, bottom-right) === */
 .tweaks-launcher {
   position: fixed;
