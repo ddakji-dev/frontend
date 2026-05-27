@@ -2455,3 +2455,317 @@ html, body {
   to { transform: rotate(360deg); }
 }
 .tweaks-launcher-label { line-height: 1; }
+
+
+/* ===========================================================================
+   📱 MOBILE / TABLET RESPONSIVE
+   =========================================================================== */
+
+/* Use dynamic viewport height so the bottom UI doesn't get hidden under
+   mobile browser chrome (URL bar, gesture bar). */
+@supports (height: 100dvh) {
+  html, body { height: 100dvh; }
+}
+
+/* ── Tablet & smaller phones ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  html, body { font-size: 14px; overflow: hidden; }
+
+  /* === Topbar === */
+  .topbar {
+    padding: 12px 16px;
+  }
+  .topbar .brand-mark { font-size: 18px; }
+  .nav-tabs { gap: 2px; }
+  .nav-tab {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .scrap-counter {
+    padding: 6px 10px 6px 8px;
+    gap: 6px;
+  }
+  .scrap-num { font-size: 13px; }
+  .scrap-label { font-size: 9px; }
+
+  /* === Lobby — arcade poster === */
+  .lobby-arcade {
+    padding: 20px 20px 28px;
+    gap: 12px;
+    grid-template-rows: auto auto 1fr;
+    overflow-y: auto;
+  }
+  .lobby-headline {
+    font-size: 72px;
+    -webkit-text-stroke-width: 2.5px;
+    text-shadow:
+      4px 4px 0 var(--jeok),
+      4px 4px 0 var(--ink-0),
+      5px 5px 0 var(--ink-0);
+  }
+  .lobby-stamp { padding: 4px 14px; margin-bottom: 12px; }
+  .lobby-stamp-text { font-size: 12px; letter-spacing: 0.16em; }
+  .sub-line { width: 36px; }
+  .sub-text { font-size: 12px; letter-spacing: 0.3em; }
+
+  /* Decorative — hide far edges to avoid overflow */
+  .deco-word.w5 { display: none; }
+  .deco-word.w1 { font-size: 60px; top: 4%; left: 2%; }
+  .deco-word.w2 { font-size: 54px; top: 8%; right: 2%; }
+  .deco-word.w3 { font-size: 44px; bottom: 14%; left: 2%; }
+  .deco-word.w4 { font-size: 56px; bottom: 8%; right: 2%; }
+  .deco-mini-ddakji { opacity: 0.08; }
+
+  .lobby-arcade-actions {
+    max-width: 100%;
+    gap: 10px;
+  }
+  .arcade-btn {
+    padding: 14px 16px 14px 14px;
+    box-shadow: 4px 4px 0 var(--ink-0);
+  }
+  .arcade-btn-primary { box-shadow: 4px 4px 0 var(--jeok-deep); }
+  .arcade-btn-stamp { width: 44px; height: 44px; font-size: 22px; }
+  .arcade-btn-title { font-size: 18px; }
+  .arcade-btn-sub { font-size: 11px; }
+
+  .energy-burst { width: 260px; height: 260px; }
+  .energy-burst span { width: 100px; }
+  .energy-burst span:nth-child(1) { transform: rotate(0deg)   translateX(60px); }
+  .energy-burst span:nth-child(2) { transform: rotate(45deg)  translateX(60px); }
+  .energy-burst span:nth-child(3) { transform: rotate(90deg)  translateX(60px); }
+  .energy-burst span:nth-child(4) { transform: rotate(135deg) translateX(60px); }
+  .energy-burst span:nth-child(5) { transform: rotate(180deg) translateX(60px); }
+  .energy-burst span:nth-child(6) { transform: rotate(225deg) translateX(60px); }
+  .energy-burst span:nth-child(7) { transform: rotate(270deg) translateX(60px); }
+  .energy-burst span:nth-child(8) { transform: rotate(315deg) translateX(60px); }
+
+  .lobby-name-banner { bottom: -32px; }
+  .banner-text { padding: 4px 16px; font-size: 15px; }
+
+  /* === Enhance — stack vertically === */
+  .enhance {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    overflow-y: auto;
+  }
+  .enhance-stage {
+    padding: 20px 16px 24px;
+    min-height: auto;
+    border-bottom: 1px solid var(--paper-line);
+  }
+  .enh-identity { margin-bottom: 28px; }
+  .enh-identity h2 { font-size: 28px; }
+  .enh-identity-row { gap: 10px; }
+  .enh-tier-badge { font-size: 12px; padding: 4px 10px; }
+  .enhance-panel {
+    border-left: none;
+    padding: 20px 16px 28px;
+  }
+  .track-tabs { padding: 3px; }
+  .track-tab { padding: 10px 8px; }
+  .track-tab .track-glyph { font-size: 20px; }
+  .track-tab .track-name { font-size: 12px; }
+  .enh-current-block { padding: 18px 16px; }
+  .enh-current-num { font-size: 48px; }
+  .enh-current-next { font-size: 28px; }
+  .enh-success-block { padding: 16px 18px; }
+  .enh-success-num { font-size: 44px; }
+  .enh-cta { padding: 14px 18px; font-size: 14px; }
+
+  /* === Battle — vertical stack === */
+  .battle-arena {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto 1fr;
+    padding: 16px 14px;
+    gap: 12px;
+    align-items: stretch;
+  }
+  .battle-side {
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .battle-side.right { flex-direction: row-reverse; }
+  .battle-side .battle-tag {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: flex-start;
+  }
+  .battle-side.right .battle-tag { justify-content: flex-end; }
+  .battle-name { font-size: 16px; flex: 1; min-width: 0; }
+  .battle-name.boss-name { font-size: 18px; }
+  .battle-side > div:nth-child(3) {
+    /* the ddakji wrapper */
+    flex-shrink: 0;
+  }
+  .battle-side .ddakji-wrap,
+  .battle-side > div > .ddakji-wrap { transform: scale(0.55); transform-origin: center; }
+  /* the ddakji is wrapped in animation classes; scale the parent instead */
+  .battle-arena .dd-slide-in-left,
+  .battle-arena .dd-slide-in-right,
+  .battle-arena .dd-swing-r,
+  .battle-arena .dd-swing-l,
+  .battle-arena .dd-flipped,
+  .battle-arena .dd-wobble {
+    transform-origin: center;
+  }
+  .battle-stats {
+    flex: 1;
+    gap: 8px;
+    justify-content: flex-start;
+  }
+  .battle-side.right .battle-stats { justify-content: flex-end; }
+  .battle-stat { min-width: 44px; }
+  .battle-stat .n { font-size: 20px; }
+  .battle-stat .l { font-size: 9px; letter-spacing: 0.12em; }
+  .battle-stat .sub { font-size: 9px; }
+  .battle-build-badge { font-size: 11px; padding: 3px 10px 3px 4px; margin-top: 0; }
+  .battle-build-badge .build-glyph { width: 18px; height: 18px; font-size: 12px; }
+
+  /* Center VS block becomes a horizontal strip */
+  .vs-block {
+    flex-direction: row;
+    gap: 14px;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--paper-0);
+    border: 1px solid var(--paper-line);
+    border-radius: var(--radius);
+  }
+  .vs-glyph { font-size: 28px; }
+  .hit-prob-display {
+    width: auto;
+    flex: 1;
+    margin-top: 0;
+    padding: 8px 10px;
+    border: none;
+    background: transparent;
+  }
+  .hit-prob-val { font-size: 18px; }
+  .hit-prob-val.small { font-size: 14px; }
+  .hit-prob-label { font-size: 10px; }
+
+  /* Battle topbar — compact */
+  .topbar-battle { padding: 10px 14px; gap: 12px; }
+  .topbar-battle .topbar-title { font-size: 15px; }
+  .topbar-battle .btn { padding: 8px 12px; font-size: 12px; }
+
+  /* Turn indicator */
+  .turn-indicator { padding: 10px 14px; gap: 8px; }
+  .turn-indicator .turn-num { font-size: 16px; }
+  .turn-indicator .turn-actor { font-size: 14px; }
+  .turn-warning { font-size: 9px; letter-spacing: 0.08em; }
+
+  /* CTA & log */
+  .battle-cta { padding: 0 14px 16px; min-height: 70px; }
+  .battle-swing-btn { padding: 14px 24px; font-size: 15px; }
+  .battle-cta-waiting { font-size: 13px; padding: 12px 0; }
+  .battle-turnlog {
+    padding: 10px 14px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .battle-turnlog::-webkit-scrollbar { display: none; }
+  .turnlog-pill { flex-shrink: 0; }
+
+  /* Impact effects — scale down so they fit */
+  .impact-word { font-size: 88px; -webkit-text-stroke-width: 3px; }
+  .impact-word.miss { font-size: 56px; }
+  .countdown-num { font-size: 140px; }
+
+  /* === Nickname modal === */
+  .nickname-modal-bg { padding: 20px; }
+  .nickname-modal {
+    padding: 28px 22px 24px;
+    gap: 18px;
+  }
+  .nickname-prompt h2 { font-size: 20px; }
+  .nickname-prompt p { font-size: 12px; }
+  .nickname-input {
+    padding: 14px 60px 14px 18px;
+    font-size: 18px;
+  }
+
+  /* === Result modal === */
+  .result-card {
+    padding: 28px 24px 24px;
+    min-width: 0;
+    width: 100%;
+    max-width: 360px;
+  }
+  .result-stamp { font-size: 48px; }
+  .result-sub { font-size: 12px; }
+  .result-reward { padding: 12px; gap: 16px; }
+  .result-reward-single { padding: 16px 18px; }
+  .result-reward-single .item .n { font-size: 28px; }
+  .result-reset-warn { padding: 12px 14px; gap: 10px; }
+  .result-actions { flex-wrap: wrap; gap: 8px; }
+  .result-actions .btn { flex: 1; min-width: 100px; }
+
+  /* === Enhance result overlay === */
+  .enh-result-card { padding: 24px 32px; }
+  .enh-result-card .big { font-size: 36px; }
+}
+
+/* ── Small phones (≤480px) ────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .lobby-headline {
+    font-size: 60px;
+    -webkit-text-stroke-width: 2px;
+    text-shadow:
+      3px 3px 0 var(--jeok),
+      3px 3px 0 var(--ink-0),
+      4px 4px 0 var(--ink-0);
+  }
+  .lobby-stamp-text { font-size: 11px; }
+
+  /* Single decorative word + ddakji at most */
+  .deco-word.w2,
+  .deco-word.w3 { display: none; }
+
+  /* Action buttons very compact */
+  .arcade-btn-title { font-size: 16px; }
+  .arcade-btn-sub { font-size: 10px; }
+  .arcade-btn-stamp { width: 38px; height: 38px; font-size: 18px; }
+
+  /* Battle — tighter still */
+  .battle-side .battle-tag .battle-order,
+  .battle-side .battle-tag .battle-boss-tag {
+    display: inline-block;
+  }
+  .battle-name { font-size: 14px; }
+  .battle-stat .n { font-size: 18px; }
+  .impact-word { font-size: 68px; }
+}
+
+/* ── Landscape phones ─────────────────────────────────────────────────────── */
+@media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
+  .lobby-headline {
+    font-size: 48px;
+    -webkit-text-stroke-width: 1.5px;
+    text-shadow:
+      3px 3px 0 var(--jeok),
+      3px 3px 0 var(--ink-0),
+      4px 4px 0 var(--ink-0);
+  }
+  .lobby-arcade { padding: 12px 24px; gap: 8px; }
+  .lobby-arcade-actions { gap: 8px; }
+  .arcade-btn { padding: 10px 14px; }
+  .arcade-btn-title { font-size: 14px; }
+  .arcade-btn-sub { font-size: 10px; }
+  .energy-burst { width: 200px; height: 200px; }
+  .lobby-name-banner { bottom: -24px; }
+}
+
+/* ── Touch-target floor: ensure interactive elements are ≥44px tappable ──── */
+@media (pointer: coarse) {
+  .nav-tab { min-height: 36px; }
+  .btn { min-height: 40px; }
+  .arcade-btn { min-height: 56px; }
+}

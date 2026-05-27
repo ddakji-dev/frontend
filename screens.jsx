@@ -560,7 +560,7 @@ function BattleScreen() {
           {/* Swing result callout — only after impact */}
           {lastSwing && showSwingResult && (
             <div key={`${lastSwing.actor}-${log.length}`} className={`swing-result ${lastSwing.hit ? 'hit' : 'miss'}`}>
-              {lastSwing.hit ? '뒤집기 성공!' : '빗나감'}
+              {lastSwing.hit ? '뒤집기 성공!' : '빗나갔다'}
             </div>
           )}
         </div>
@@ -622,7 +622,7 @@ function BattleScreen() {
       {/* Turn log */}
       <div className="battle-turnlog">
         <span className="history-label">교환 기록</span>
-        {log.length === 0 && <span style={{ color: 'var(--ink-3)', fontSize: 12 }}>아직 시작하지 않음</span>}
+        {log.length === 0 && <span style={{ color: 'var(--ink-3)', fontSize: 12 }}>아직 한 차례도 휘두르지 않음</span>}
         {log.slice(-8).map((entry, i) => (
           <span key={i} className={`turnlog-pill ${entry.hit ? 'hit' : 'miss'} ${entry.actor}`}>
             <span className="mono">{entry.turn}T</span>

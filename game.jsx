@@ -140,20 +140,22 @@ const OPPONENT_ROSTER = [
   { name: '뒷골목 영수',     atk: 4,  def: 1,  build: 'attack'  },
   { name: '학교 일진',       atk: 2,  def: 5,  build: 'defense' },
   { name: '거리의 무명',     atk: 5,  def: 5,  build: 'balance' },
-  { name: '문방구 김씨',     atk: 3,  def: 9,  build: 'defense'    },
-  { name: '시장통 갑돌',     atk: 10, def: 3,  build: 'attack'   },
+  { name: '문방구 김씨',     atk: 3,  def: 9,  build: 'tank'    },
+  { name: '시장통 갑돌',     atk: 10, def: 3,  build: 'glass'   },
   { name: '옥상 박씨',       atk: 8,  def: 8,  build: 'balance' },
   { name: '전설의 종이꾼',   atk: 15, def: 5,  build: 'attack'  },
   { name: '딱지왕 후보',     atk: 6,  def: 15, build: 'defense' },
   { name: '강북 챔피언',     atk: 12, def: 12, build: 'balance' },
-  { name: '잊혀진 도장꾼',   atk: 19, def: 9,  build: 'attack'   },
+  { name: '잊혀진 도장꾼',   atk: 19, def: 9,  build: 'glass'   },
   { name: '바람의 최강자',   atk: 20, def: 20, build: 'balance' },
 ];
 
 const BUILD_INFO = {
-  balance: { label: '균형',     glyph: '⚖️', tone: 'neutral' },
-  attack:  { label: '공격형',   glyph: '🗡️', tone: 'jeok'    },
-  defense: { label: '방어형',   glyph: '🛡️', tone: 'cheong'  },  
+  balance: { label: '균형',     glyph: '中', tone: 'neutral' },
+  attack:  { label: '공격형',   glyph: '攻', tone: 'jeok'    },
+  defense: { label: '방어형',   glyph: '守', tone: 'cheong'  },
+  tank:    { label: '탱크',     glyph: '盾', tone: 'cheong'  },
+  glass:   { label: '글래스캐논', glyph: '刃', tone: 'jeok'  },
 };
 
 // 기존 외부 호환 — 이름 목록만 유지
