@@ -426,38 +426,312 @@ html, body {
   background: var(--ink-0);
 }
 
-/* Lobby — minimal centered layout */
-.lobby-min {
+/* === LOBBY — arcade game-y === */
+.lobby-arcade {
   height: 100%;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  align-items: center;
+  justify-items: center;
+  gap: 16px;
+  padding: 28px 40px 40px;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 35%, oklch(0.96 0.022 80) 0%, var(--paper-1) 55%),
+    var(--paper-1);
+}
+
+/* Decorative scattered elements */
+.lobby-deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.deco-word {
+  position: absolute;
+  font-family: 'Gowun Batang', serif;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 2.5px oklch(0.4 0.04 60 / 0.18);
+  user-select: none;
+  white-space: nowrap;
+  animation: deco-bob 6s ease-in-out infinite;
+}
+.deco-word.w1 { top: 8%;  left: 6%;  font-size: 92px; transform: rotate(-12deg); -webkit-text-stroke-color: oklch(0.55 0.16 25 / 0.22); animation-delay: 0s; }
+.deco-word.w2 { top: 14%; right: 8%; font-size: 78px; transform: rotate(8deg);   -webkit-text-stroke-color: oklch(0.55 0.14 240 / 0.20); animation-delay: 1.2s; }
+.deco-word.w3 { bottom: 18%; left: 4%; font-size: 64px; transform: rotate(-6deg); -webkit-text-stroke-color: oklch(0.4 0.04 60 / 0.16); animation-delay: 2.4s; }
+.deco-word.w4 { bottom: 10%; right: 5%; font-size: 88px; transform: rotate(14deg); -webkit-text-stroke-color: oklch(0.55 0.16 25 / 0.20); animation-delay: 3.6s; }
+.deco-word.w5 { top: 50%;  right: 3%; font-size: 56px; transform: rotate(-18deg); -webkit-text-stroke-color: oklch(0.4 0.04 60 / 0.15); animation-delay: 4.8s; }
+@keyframes deco-bob {
+  0%, 100% { transform: rotate(var(--r, 0deg)) translateY(0); opacity: 0.85; }
+  50% { transform: rotate(var(--r, 0deg)) translateY(-6px); opacity: 1; }
+}
+/* re-apply rotations because we used transform in @keyframes */
+.deco-word.w1 { --r: -12deg; }
+.deco-word.w2 { --r: 8deg; }
+.deco-word.w3 { --r: -6deg; }
+.deco-word.w4 { --r: 14deg; }
+.deco-word.w5 { --r: -18deg; }
+
+.deco-mini-ddakji {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  background:
+    linear-gradient(45deg,  var(--jeok) 50%, transparent 50%),
+    linear-gradient(-45deg, var(--cheong) 50%, transparent 50%),
+    linear-gradient(135deg, oklch(0.78 0.14 85) 50%, transparent 50%),
+    linear-gradient(-135deg, oklch(0.45 0.05 50) 50%, transparent 50%);
+  background-size: 100% 100%;
+  border-radius: 2px;
+  opacity: 0.12;
+  transform: rotate(0deg);
+}
+.deco-mini-ddakji.m1 { top: 24%; left: 16%; transform: rotate(20deg); }
+.deco-mini-ddakji.m2 { top: 70%; left: 22%; transform: rotate(-30deg); width: 40px; height: 40px; }
+.deco-mini-ddakji.m3 { top: 30%; right: 20%; transform: rotate(40deg); width: 60px; height: 60px; }
+.deco-mini-ddakji.m4 { top: 75%; right: 18%; transform: rotate(-15deg); width: 80px; height: 80px; }
+
+/* Title — stamp/arcade style */
+.lobby-arcade-title {
+  text-align: center;
+  z-index: 2;
+  margin-top: 12px;
+}
+.lobby-stamp {
+  display: inline-block;
+  padding: 6px 18px;
+  border: 2px solid var(--jeok);
+  border-radius: 3px;
+  margin-bottom: 18px;
+  background: oklch(0.96 0.012 80);
+  box-shadow: 3px 3px 0 var(--jeok);
+  transform: rotate(-2deg);
+}
+.lobby-stamp-text {
+  font-family: 'Gowun Batang', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--jeok);
+  letter-spacing: 0.2em;
+}
+.lobby-headline {
+  font-family: 'Gowun Batang', serif;
+  font-size: 112px;
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: var(--paper-0);
+  -webkit-text-stroke: 5px var(--ink-0);
+  text-shadow:
+    8px 8px 0 var(--jeok),
+    8px 8px 0 var(--ink-0),
+    9px 9px 0 var(--ink-0);
+  margin: 0;
+  transform: rotate(-1deg);
+  animation: title-breathe 3s ease-in-out infinite;
+}
+@keyframes title-breathe {
+  0%, 100% { transform: rotate(-1deg) scale(1); }
+  50% { transform: rotate(-1deg) scale(1.015); }
+}
+.lobby-subline {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 40px;
-  padding: 40px;
-  position: relative;
+  gap: 14px;
+  margin-top: 22px;
 }
-.lobby-min-title {
-  text-align: center;
+.sub-line {
+  width: 60px;
+  height: 1px;
+  background: var(--ink-1);
 }
-.lobby-min-title h1 {
+.sub-text {
   font-family: 'Gowun Batang', serif;
-  font-size: 72px;
-  letter-spacing: -0.03em;
-  line-height: 1;
+  font-size: 14px;
   font-weight: 700;
   color: var(--ink-0);
+  letter-spacing: 0.4em;
 }
-.lobby-min-sub {
-  margin-top: 18px;
-  color: var(--ink-2);
-  font-size: 14px;
-  letter-spacing: 0.06em;
+
+/* Ddakji centerpiece */
+.lobby-arcade-ddakji {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.ddakji-float {
+  animation: ddakji-bob 3.5s ease-in-out infinite;
+  filter: drop-shadow(0 16px 24px oklch(0.25 0.01 50 / 0.18));
+}
+@keyframes ddakji-bob {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+/* Radiating energy lines */
+.energy-burst {
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: energy-rotate 18s linear infinite;
+}
+.energy-burst span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 140px;
+  height: 3px;
+  margin-top: -1.5px;
+  background: linear-gradient(90deg, transparent, var(--jeok) 60%, transparent);
+  transform-origin: 0 50%;
+  opacity: 0.18;
+}
+.energy-burst span:nth-child(1) { transform: rotate(0deg)   translateX(80px); }
+.energy-burst span:nth-child(2) { transform: rotate(45deg)  translateX(80px); background: linear-gradient(90deg, transparent, var(--cheong) 60%, transparent); }
+.energy-burst span:nth-child(3) { transform: rotate(90deg)  translateX(80px); }
+.energy-burst span:nth-child(4) { transform: rotate(135deg) translateX(80px); background: linear-gradient(90deg, transparent, var(--cheong) 60%, transparent); }
+.energy-burst span:nth-child(5) { transform: rotate(180deg) translateX(80px); }
+.energy-burst span:nth-child(6) { transform: rotate(225deg) translateX(80px); background: linear-gradient(90deg, transparent, var(--cheong) 60%, transparent); }
+.energy-burst span:nth-child(7) { transform: rotate(270deg) translateX(80px); }
+.energy-burst span:nth-child(8) { transform: rotate(315deg) translateX(80px); background: linear-gradient(90deg, transparent, var(--cheong) 60%, transparent); }
+@keyframes energy-rotate {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Nickname banner — taped paper strip */
+.lobby-name-banner {
+  position: absolute;
+  bottom: -38px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1.5deg);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.banner-text {
+  background: var(--paper-0);
+  padding: 6px 22px;
+  border: 1.5px solid var(--ink-0);
   font-family: 'Gowun Batang', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink-0);
+  letter-spacing: -0.01em;
+  box-shadow: 3px 3px 0 var(--ink-0);
+  position: relative;
 }
-.lobby-min-ddakji {
-  margin: 8px 0;
+.banner-tape {
+  position: absolute;
+  width: 24px;
+  height: 16px;
+  background: oklch(0.85 0.12 80 / 0.7);
+  border: 1px solid oklch(0.7 0.1 70 / 0.4);
+  top: -8px;
+  left: -10px;
+  transform: rotate(-30deg);
 }
+.banner-tape.right { left: auto; right: -10px; top: -6px; transform: rotate(28deg); }
+
+/* Action buttons — punchy stamp style */
+.lobby-arcade-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 420px;
+  z-index: 2;
+  margin-top: 24px;
+}
+.arcade-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 22px 18px 18px;
+  background: var(--paper-0);
+  border: 2px solid var(--ink-0);
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  color: var(--ink-0);
+  transition: transform 120ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 120ms ease, background 120ms ease;
+  box-shadow: 5px 5px 0 var(--ink-0);
+}
+.arcade-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 var(--ink-0);
+}
+.arcade-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink-0);
+}
+.arcade-btn-primary {
+  background: var(--jeok);
+  color: var(--paper-0);
+  border-color: var(--jeok-deep);
+  box-shadow: 5px 5px 0 var(--jeok-deep);
+}
+.arcade-btn-primary:hover { box-shadow: 7px 7px 0 var(--jeok-deep); background: var(--jeok); }
+.arcade-btn-primary:active { box-shadow: 1px 1px 0 var(--jeok-deep); }
+.arcade-btn-stamp {
+  width: 52px;
+  height: 52px;
+  border-radius: 4px;
+  background: var(--paper-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Gowun Batang', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink-0);
+  flex-shrink: 0;
+  border: 1.5px dashed var(--ink-0);
+}
+.arcade-btn-primary .arcade-btn-stamp {
+  background: var(--paper-0);
+  color: var(--jeok-deep);
+  border-color: var(--paper-0);
+}
+.arcade-btn-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.arcade-btn-title {
+  font-family: 'Gowun Batang', serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.arcade-btn-sub {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  opacity: 0.75;
+}
+.arcade-btn-arrow {
+  font-size: 22px;
+  font-weight: 700;
+  transition: transform 120ms ease;
+}
+.arcade-btn:hover .arcade-btn-arrow { transform: translateX(4px); }
+
+/* === LOBBY end === */
 
 /* Legacy lobby (kept in case) */
 .lobby {

@@ -98,40 +98,72 @@ function BidirectionalStatBar({ atk, def, max = 65 }) {
 }
 
 // =========================================================================
-// Lobby
+// Lobby — game-y arcade-poster vibe
 // =========================================================================
 function LobbyScreen() {
   const g = useGame();
 
   return (
-    <div className="lobby-min paper-grain" data-screen-label="01 Lobby">
-      <div className="lobby-min-title">
-        <h1 className="serif">딱지치기</h1>
-        <div className="lobby-min-sub">한 판 승부</div>
+    <div className="lobby-arcade paper-grain" data-screen-label="01 Lobby">
+      {/* Decorative scattered onomatopoeia + mini ddakji */}
+      <div className="lobby-deco">
+        {/* <span className="deco-word w1">딱!</span>
+        <span className="deco-word w2">쾅</span>
+        <span className="deco-word w3">슉...</span>
+        <span className="deco-word w4">탁!</span>
+        <span className="deco-word w5">꽝!</span> */}
+        <span className="deco-mini-ddakji m1" />
+        <span className="deco-mini-ddakji m2" />
+        <span className="deco-mini-ddakji m3" />
+        <span className="deco-mini-ddakji m4" />
       </div>
 
-      <div className="ddakji-slot lobby-min-ddakji">
-        <div className="ddakji-glow" />
-        <DdakjiCard size={260} seed={g.paletteSeed} atkLvl={g.atkLvl} defLvl={g.defLvl} />
+      {/* Title block */}
+      <div className="lobby-arcade-title">
+        <div className="lobby-stamp">
+          <span className="lobby-stamp-text">한 판 승부</span>
+        </div>
+        <h1 className="lobby-headline">딱지치기</h1>
+        <div className="lobby-subline">
+        </div>
       </div>
 
-      <div className="actions-stack">
-        <button className="action-btn" onClick={() => { g.summonOpponent(); g.setScreen('battle'); }}>
-          <span className="action-glyph">⚔️</span>
-          <span className="action-text">
-            <div className="action-title">딱지치기</div>
-            <div className="action-meta">NPC와 한 판 붙기 · 승리 시 종이 조각 획득</div>
+      {/* Ddakji with radiating energy */}
+      <div className="lobby-arcade-ddakji">
+        <div className="energy-burst">
+          <span /><span /><span /><span />
+          <span /><span /><span /><span />
+        </div>
+        <div className="ddakji-float">
+          <DdakjiCard size={240} seed={g.paletteSeed} atkLvl={g.atkLvl} defLvl={g.defLvl} />
+        </div>
+        {g.nickname && (
+          <div className="lobby-name-banner serif">
+            <span className="banner-tape" />
+            <span className="banner-text">{g.nickname}</span>
+            <span className="banner-tape right" />
+          </div>
+        )}
+      </div>
+
+      {/* Action buttons */}
+      <div className="lobby-arcade-actions">
+        <button className="arcade-btn arcade-btn-primary" onClick={() => { g.summonOpponent(); g.setScreen('battle'); }}>
+          <span className="arcade-btn-stamp">⚔️</span>
+          <span className="arcade-btn-text">
+            <span className="arcade-btn-title">딱지치기</span>
+            <span className="arcade-btn-sub">NPC와 한 판 붙기, 승리 후 종이 조각 획득</span>
           </span>
-          <span className="action-arrow">→</span>
+          <span className="arcade-btn-arrow">→</span>
         </button>
 
-        <button className="action-btn" onClick={() => g.setScreen('enhance')}>
-          <span className="action-glyph">🔨</span>
-          <span className="action-text">
-            <div className="action-title">딱지 강화하기</div>
-            <div className="action-meta">내 딱지 정보 · 종이 조각으로 딱지 강화</div>
+        <button className="arcade-btn" onClick={() => g.setScreen('enhance')}>
+          <span className="arcade-btn-stamp atelier">🔨</span>
+          <span className="arcade-btn-text">
+            <span className="arcade-btn-title">딱지 강화하기</span>
+            <span className="arcade-btn-sub">종이 조각으로 딱지 강화</span>
           </span>
-          <span className="action-arrow">→</span>
+          <span className="arcade-btn-arrow">→</span>
         </button>
       </div>
     </div>
