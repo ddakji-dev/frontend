@@ -75,11 +75,13 @@ function zoneOfNextLevel(nextLvl) {
   // 성공률 구간으로 안전/일반/위험/극한 라벨링 (UI용)
   // stayShare: 실패했을 때 그중 유지될 비율. 나머지는 하락.
   // dropAmount: 하락 시 떨어지는 강 수.
+  // 고강 구간일수록 '하락' 대신 '유지' 비중을 키워, 들인 종이에 비해
+  // 진행이 통째로 무너지지 않도록 완화.
   let zoneInfo;
   if (rate >= 0.85)      zoneInfo = { key: 'safe',    label: '안전', stayShare: 1.00, dropAmount: 0, cost: 10  };
-  else if (rate >= 0.50) zoneInfo = { key: 'normal',  label: '일반', stayShare: 0.70, dropAmount: 1, cost: 25  };
-  else if (rate >= 0.20) zoneInfo = { key: 'danger',  label: '위험', stayShare: 0.40, dropAmount: 1, cost: 50  };
-  else                   zoneInfo = { key: 'extreme', label: '극한', stayShare: 0.20, dropAmount: 2, cost: 100 };
+  else if (rate >= 0.50) zoneInfo = { key: 'normal',  label: '일반', stayShare: 0.85, dropAmount: 1, cost: 25  };
+  else if (rate >= 0.20) zoneInfo = { key: 'danger',  label: '위험', stayShare: 0.70, dropAmount: 1, cost: 50  };
+  else                   zoneInfo = { key: 'extreme', label: '극한', stayShare: 0.60, dropAmount: 1, cost: 100 };
 
   const failRate = 1 - rate;
   const stayRate = failRate * zoneInfo.stayShare;
@@ -114,6 +116,21 @@ function winProbability(myAtk, oppDef) {
   return Math.round(rate * 100); // 0~100
 }
 
+// === 턴 경과 보정 (momentum) ===
+// 방어 특화 상대처럼 양측 명중률이 모두 낮으면 전투가 한없이 길어진다.
+// 턴이 쌓일수록 명중률에 가산 보정을 주어 반드시 수렴하게 만든다.
+// 양측에 동일하게 적용되므로 유불리는 그대로 유지된다.
+const MOMENTUM_GRACE = 2;   // 이 턴까지는 보정 없음
+const MOMENTUM_STEP  = 10;  // 이후 턴마다 +10%p
+const MOMENTUM_CAP   = 60;  // 최대 +60%p
+function momentumBonus(turn) {
+  if (turn <= MOMENTUM_GRACE) return 0;
+  return Math.min(MOMENTUM_CAP, (turn - MOMENTUM_GRACE) * MOMENTUM_STEP);
+}
+function applyMomentum(baseProb, turn) {
+  return Math.max(0, Math.min(100, baseProb + momentumBonus(turn)));
+}
+
 // === Ddakji palette generation ===
 
 // Curated palettes inspired by 단청 / 색종이
@@ -133,21 +150,26 @@ function paletteForSeed(seed) {
 }
 
 // === Opponent generation ===
-// 12명의 NPC가 항상 동일한 순서로 등장. 각자 다른 빌드 타입.
-// 'balance' 균형 · 'attack' 공격형 · 'defense' 방어형 · 'glass' 글래스캐논 · 'tank' 탱크
+// NPC가 항상 동일한 순서로 등장. 각자 다른 빌드 타입.
+// 'balance' 균형 · 'attack' 공격형 · 'defense' 방어형
+// 스탯합이 완만하게 상승하도록 후반 구간(28→40)에 중간 단계 추가.
 const OPPONENT_ROSTER = [
-  { name: '동네 형',         atk: 1,  def: 1,  build: 'balance' },
-  { name: '뒷골목 영수',     atk: 4,  def: 1,  build: 'attack'  },
-  { name: '학교 일진',       atk: 2,  def: 5,  build: 'defense' },
-  { name: '거리의 무명',     atk: 5,  def: 5,  build: 'balance' },
-  { name: '문방구 김씨',     atk: 3,  def: 9,  build: 'defense'    },
-  { name: '시장통 갑돌',     atk: 10, def: 3,  build: 'attack'   },
-  { name: '옥상 박씨',       atk: 8,  def: 8,  build: 'balance' },
-  { name: '전설의 종이꾼',   atk: 15, def: 5,  build: 'attack'  },
-  { name: '딱지왕 후보',     atk: 6,  def: 15, build: 'defense' },
-  { name: '강북 챔피언',     atk: 12, def: 12, build: 'balance' },
-  { name: '잊혀진 도장꾼',   atk: 19, def: 9,  build: 'attack'   },
-  { name: '바람의 최강자',   atk: 20, def: 20, build: 'balance' },
+  { name: '동네 형',         atk: 1,  def: 1,  build: 'balance' }, // 2
+  { name: '뒷골목 영수',     atk: 4,  def: 1,  build: 'attack'  }, // 5
+  { name: '학교 일진',       atk: 2,  def: 5,  build: 'defense' }, // 7
+  { name: '거리의 무명',     atk: 5,  def: 5,  build: 'balance' }, // 10
+  { name: '문방구 김씨',     atk: 3,  def: 9,  build: 'defense' }, // 12
+  { name: '시장통 갑돌',     atk: 10, def: 3,  build: 'attack'  }, // 13
+  { name: '옥상 박씨',       atk: 8,  def: 8,  build: 'balance' }, // 16
+  { name: '전설의 종이꾼',   atk: 15, def: 5,  build: 'attack'  }, // 20
+  { name: '딱지왕 후보',     atk: 6,  def: 15, build: 'defense' }, // 21
+  { name: '강북 챔피언',     atk: 12, def: 12, build: 'balance' }, // 24
+  { name: '잊혀진 도장꾼',   atk: 19, def: 9,  build: 'attack'  }, // 28
+  { name: '철벽의 노인',     atk: 12, def: 19, build: 'defense' }, // 31
+  { name: '뒷산 대장',       atk: 16, def: 16, build: 'balance' }, // 32
+  { name: '그림자 검객',     atk: 20, def: 15, build: 'attack'  }, // 35
+  { name: '백전노장',        atk: 18, def: 19, build: 'defense' }, // 37
+  { name: '바람의 최강자',   atk: 20, def: 20, build: 'balance' }, // 40
 ];
 
 const BUILD_INFO = {
@@ -250,7 +272,19 @@ function GameProvider({ children }) {
     }
   }, [atkLvl, defLvl, paperScraps]);
 
+  // 현재 상대를 보장한다(없으면 생성). 진행도(opponentIdx)는 올리지 않는다.
+  // 로비↔대결을 오가도 같은 상대가 유지된다.
   const summonOpponent = useCallback(() => {
+    const idx = Math.max(1, opponentIdx); // 첫 진입이면 #1
+    if (currentOpponent && opponentIdx >= 1) return currentOpponent;
+    setOpponentIdx(idx);
+    const opp = makeOpponent(idx);
+    setCurrentOpponent(opp);
+    return opp;
+  }, [opponentIdx, currentOpponent]);
+
+  // 다음 상대로 진행한다(승리 후 호출).
+  const advanceOpponent = useCallback(() => {
     const next = opponentIdx + 1;
     setOpponentIdx(next);
     const opp = makeOpponent(next);
@@ -291,7 +325,7 @@ function GameProvider({ children }) {
     nickname, setNickname, clearNickname,
     eff, myPower,
     history,
-    currentOpponent, summonOpponent,
+    currentOpponent, summonOpponent, advanceOpponent,
     enhance, completeBattle, addScraps,
   };
 
@@ -300,6 +334,7 @@ function GameProvider({ children }) {
 
 Object.assign(window, {
   effectiveStats, totalPower, zoneOfNextLevel, scrapsFromDecomposing, winProbability,
+  momentumBonus, applyMomentum,
   cumulativeStatAt, penaltyFromOppositeLevel, statGainAtLevel,
   paletteForSeed, makeOpponent, tierOf,
   PALETTES, OPPONENT_NAMES, OPPONENT_ROSTER, TOTAL_OPPONENTS,

@@ -385,8 +385,12 @@ function BattleScreen() {
     );
   }
 
-  const playerHitProb = winProbability(g.eff.atk, opp.effDef);
-  const oppHitProb    = winProbability(opp.effAtk, g.eff.def);
+  const basePlayerHitProb = winProbability(g.eff.atk, opp.effDef);
+  const baseOppHitProb    = winProbability(opp.effAtk, g.eff.def);
+  // 턴 경과 보정 적용 — 표시·판정 모두 이 값을 사용
+  const playerHitProb = applyMomentum(basePlayerHitProb, turnNum);
+  const oppHitProb    = applyMomentum(baseOppHitProb, turnNum);
+  const momentum      = momentumBonus(turnNum);
 
   const startBattle = () => {
     setPhase('player-turn');
@@ -446,7 +450,12 @@ function BattleScreen() {
     setLastSwing(null);
     setShowSwingResult(false);
     setPhase('intro');
-    g.summonOpponent();
+    g.advanceOpponent(); // 승리 후 다음 상대로 진행
+  };
+
+  const winToLobby = () => {
+    g.advanceOpponent(); // 이긴 상대는 지나가고 다음 상대를 예약
+    g.setScreen('lobby');
   };
 
   // Animation class resolution
@@ -470,7 +479,9 @@ function BattleScreen() {
     <div className="battle" data-screen-label="03 Battle">
       <div className="topbar topbar-battle" style={{ borderBottom: '1px solid var(--paper-line)' }}>
         <div className="topbar-left">
-          <button className="btn btn-ghost" onClick={() => g.setScreen('lobby')}>← 로비</button>
+          {phase === 'intro' && (
+            <button className="btn btn-ghost" onClick={() => g.setScreen('lobby')}>← 로비</button>
+          )}
         </div>
         <div className="serif topbar-title" style={{ fontSize: 18 }}>대결장</div>
         <div className="topbar-right">
@@ -555,6 +566,12 @@ function BattleScreen() {
             <div className="hit-prob-bar">
               <div className="hit-prob-fill def" style={{ width: oppHitProb + '%' }} />
             </div>
+            {momentum > 0 && (
+              <div className="momentum-tag">
+                <span className="momentum-icon">⚡</span>
+                기세 +{momentum}%p
+              </div>
+            )}
           </div>
 
           {/* Swing result callout — only after impact */}
@@ -641,7 +658,7 @@ function BattleScreen() {
           opp={opp}
           nickname={g.nickname}
           onAgain={newOpponent}
-          onLobby={() => g.setScreen('lobby')}
+          onLobby={winToLobby}
           onDefeatExit={() => {
             // Loss path: clearing nickname triggers the NicknameModal
             // automatically once we leave the battle screen.

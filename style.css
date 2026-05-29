@@ -1449,6 +1449,29 @@ html, body {
 }
 .hit-prob-fill.atk { background: var(--jeok); }
 .hit-prob-fill.def { background: var(--cheong); }
+
+/* Momentum (turn bonus) tag */
+.momentum-tag {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: oklch(0.42 0.12 60);
+  background: color-mix(in oklch, oklch(0.78 0.14 75) 22%, var(--paper-0));
+  border: 1px solid color-mix(in oklch, oklch(0.78 0.14 75) 45%, var(--paper-line));
+  animation: momentum-pulse 1.4s ease-in-out infinite;
+}
+.momentum-icon { font-size: 12px; }
+@keyframes momentum-pulse {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
 .hit-prob-meta {
   margin-top: 8px;
   display: flex;
