@@ -731,6 +731,118 @@ html, body {
 }
 .arcade-btn:hover .arcade-btn-arrow { transform: translateX(4px); }
 
+/* === Lobby button hover preview === */
+.arcade-btn-wrap {
+  position: relative;
+  width: 100%;
+}
+.arcade-btn-wrap > .arcade-btn {
+  width: 100%;
+}
+.btn-preview {
+  position: fixed;
+  top: 50%;
+  width: 420px;
+  background: var(--paper-0);
+  border: 2px solid var(--ink-0);
+  border-radius: 14px;
+  box-shadow: 9px 9px 0 var(--ink-0);
+  padding: 0;
+  overflow: hidden;
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.btn-preview.left {
+  left: max(28px, calc(50vw - 720px));
+  transform: translateY(-50%) translateX(-16px) scale(0.97);
+}
+.btn-preview.right {
+  right: max(28px, calc(50vw - 720px));
+  transform: translateY(-50%) translateX(16px) scale(0.97);
+}
+<<<<<<< HEAD:src/style.css
+=======
+/* Reveal on button hover */
+>>>>>>> ba7162f3f13567365f9a48620403fc41d1c53ec3:style.css
+.arcade-btn-wrap:hover .btn-preview {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0) scale(1);
+}
+
+.btn-preview-shot {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: var(--paper-2);
+  border-bottom: 2px solid var(--ink-0);
+  overflow: hidden;
+}
+.btn-preview-shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.btn-preview-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background:
+    repeating-linear-gradient(45deg, var(--paper-2), var(--paper-2) 10px, var(--paper-3) 10px, var(--paper-3) 20px);
+}
+.btn-preview-placeholder .bp-glyph {
+  font-size: 44px;
+  font-weight: 700;
+  color: var(--ink-1);
+  opacity: 0.5;
+}
+.btn-preview-placeholder .bp-hint {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-2);
+  background: var(--paper-0);
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+}
+.btn-preview-body {
+  padding: 18px 20px 20px;
+}
+.btn-preview-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink-0);
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.btn-preview-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-1);
+  text-wrap: pretty;
+}
+.btn-preview-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+.btn-preview-tags .bp-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-1);
+  background: var(--paper-2);
+  border: 1px solid var(--paper-line);
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
 /* === LOBBY end === */
 
 /* Legacy lobby (kept in case) */
@@ -1606,10 +1718,6 @@ html, body {
   letter-spacing: 0.04em;
   margin-bottom: 18px;
   font-style: italic;
-}
-  gap: 14px;
-  align-items: center;
-  text-align: left;
 }
 .reset-warn-icon {
   font-size: 24px;
@@ -2843,4 +2951,11 @@ html, body {
   .nav-tab { min-height: 36px; }
   .btn { min-height: 40px; }
   .arcade-btn { min-height: 56px; }
+  /* Hover previews can't be triggered on touch — hide them */
+  .btn-preview { display: none; }
+}
+
+/* Hide hover previews where there's no horizontal room beside the buttons */
+@media (max-width: 1100px) {
+  .btn-preview { display: none; }
 }
