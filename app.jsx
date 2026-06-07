@@ -20,7 +20,7 @@ function App() {
           <nav className="nav-tabs">
             <button className={`nav-tab ${g.screen === 'lobby' ? 'active' : ''}`} onClick={() => g.setScreen('lobby')}>로비</button>
             <button className={`nav-tab ${g.screen === 'enhance' ? 'active' : ''}`} onClick={() => g.setScreen('enhance')}>강화</button>
-            <button className={`nav-tab ${g.screen === 'battle' ? 'active' : ''}`} onClick={() => { if (!g.currentOpponent) g.summonOpponent(); g.setScreen('battle'); }}>대결</button>
+            <button className={`nav-tab ${g.screen === 'battle' ? 'active' : ''}`} onClick={() => { g.summonOpponent(); g.setScreen('battle'); }}>대결</button>
           </nav>
           <div className="top-actions">
             <div className="scrap-counter">
