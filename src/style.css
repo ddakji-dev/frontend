@@ -762,10 +762,6 @@ html, body {
   right: max(28px, calc(50vw - 720px));
   transform: translateY(-50%) translateX(16px) scale(0.97);
 }
-<<<<<<< HEAD:src/style.css
-=======
-/* Reveal on button hover */
->>>>>>> ba7162f3f13567365f9a48620403fc41d1c53ec3:style.css
 .arcade-btn-wrap:hover .btn-preview {
   opacity: 1;
   transform: translateY(-50%) translateX(0) scale(1);

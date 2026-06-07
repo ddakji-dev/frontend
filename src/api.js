@@ -5,7 +5,10 @@ window.api = (function () {
   async function request(method, path, body) {
     const res = await fetch(`${BASE}${path}`, {
       method,
-      headers: body ? { 'Content-Type': 'application/json', "ngrok-skip-browser-warning": "true" } : {},
+      headers: body ? { 
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true',
+       } : {'ngrok-skip-browser-warning': 'true'},
       body: body ? JSON.stringify(body) : undefined,
     });
     if (!res.ok) {
