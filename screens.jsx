@@ -162,7 +162,7 @@ function LobbyScreen() {
             src="assets/preview-battle.png"
             title="딱지치기"
             desc="NPC와 턴제로 맞붙어 상대 딱지를 뒤집습니다. 명중에 성공하면 승리한 뒤 [종이 조각]을 얻게 되고, 패배하면 모든 진행이 초기화됩니다."
-            tags={['턴제 대결', '확률', '보스 16명']}d
+            tags={['턴제 대결', '확률', '보스 16명']}
             placeholderGlyph="⚔"
           />
         </div>
@@ -180,7 +180,7 @@ function LobbyScreen() {
             side="right"
             src="assets/preview-enhance.png"
             title="딱지 강화하기"
-            desc="종이 조각을 사용해 재질과 동전을 강화합니다. [재질]을 강화하면 공격력이, [동전을 강화하면 방어력이 올라갑니다."
+            desc="종이 조각을 사용해 재질과 동전을 강화합니다. [재질]을 강화하면 공격력이, [동전]을 강화하면 방어력이 올라갑니다."
             tags={['재질·동전', '확률 강화', '성공·유지·하락']}
             placeholderGlyph="🔨"
           />
